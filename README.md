@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/IRMooBear/pi_driver_rtl8812au.svg?branch=master)](https://travis-ci.com/IRMooBear/pi_driver_rtl8812au)
+
 Pi Driver RTL8812AU
 =========
 
