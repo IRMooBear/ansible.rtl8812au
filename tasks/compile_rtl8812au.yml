@@ -1,0 +1,38 @@
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
+- name: git clone gnab/rtl8812au
+  git:
+    repo: https://github.com/gnab/rtl8812au.git
+    dest: /usr/local/src/rtl8812au
+    clone: yes
+    update: yes
+    force: true
+    version: "{{ rtl8812au_version }}"
+  register: rtl8812au_repo
+  retries: 3
+  delay: 10
+  until: not rtl8812au_repo.failed
+- name: set rtl8812au to be owned by local ansible_ssh_user
+  file:
+    dest: /usr/local/src/rtl8812au
+    owner: "{{ ansible_ssh_user }}"
+    recurse: yes
+- name: make rtl8812au
+  become: false
+  make:
+    chdir: /usr/local/src/rtl8812au
+    params:
+      NUM_THREADS: "{{ ansible_processor_cores }}"
+- name: copy rtl8812au kernel module
+  copy:
+    remote_src: yes
+    src: /usr/local/src/rtl8812au/8812au.ko
+    dest: /lib/modules/{{ ansible_kernel }}/kernel/drivers/net/8812au.ko
+- name: run depmod for rtl8812au
+  command: depmod
+- name: install rtl8812au to kernel
+  modprobe:
+    name: 8812au
+    state: present

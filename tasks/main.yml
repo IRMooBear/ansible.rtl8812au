@@ -1,82 +1,13 @@
 ---
 # tasks file for pi_driver_rtl8812au
-- name: check rtl8812au old module exist
+- name: check rtl8812au module exist
   stat:
     path: /lib/modules/{{ ansible_kernel }}/kernel/drivers/net/8812au.ko
   register: rtl8812au_exist
-- name: get rtl8812au dependencies
-  apt:
-    state: present
-    name: [
-      'raspberrypi-kernel-headers',
-      'git',
-      'build-essential',
-    ]
-  register: result
-  retries: 3
-  delay: 10
-  until: not result.failed
+- include: compile_rtl8812au.yml
   when: not rtl8812au_exist.stat.exists
-- name: git clone gnab/rtl8812au
-  git:
-    repo: https://github.com/gnab/rtl8812au.git
-    dest: /usr/local/src/rtl8812au
-    clone: yes
-    update: yes
-    force: true
-    version: "{{ rtl8812au_version }}"
-  register: rtl8812au_repo
-  retries: 3
-  delay: 10
-  until: not rtl8812au_repo.failed
-  when: not rtl8812au_exist.stat.exists
-- name: set rtl8812au to be owned by pi
-  file:
-    dest: /usr/local/src/rtl8812au
-    owner: pi
-    recurse: yes
-  when: not rtl8812au_exist.stat.exists
-- name: disable compile rtl8812au for i386
-  lineinfile:
-    path: /usr/local/src/rtl8812au/Makefile
-    regexp: '^CONFIG_PLATFORM_I386_PC'
-    line: 'CONFIG_PLATFORM_I386_PC = n'
-  when: not rtl8812au_exist.stat.exists
-- name: enable compile rtl8812au for RPI
-  lineinfile:
-    path: /usr/local/src/rtl8812au/Makefile
-    regexp: '^CONFIG_PLATFORM_ARM_RPI'
-    line: 'CONFIG_PLATFORM_ARM_RPI = y'
-  when: not rtl8812au_exist.stat.exists
-- name: make rtl8812au
-  become: false
-  make:
-    chdir: /usr/local/src/rtl8812au
-    params:
-      NUM_THREADS: "{{ ansible_processor_cores }}"
-  when: not rtl8812au_exist.stat.exists
-- name: copy rtl8812au kernel module
-  copy:
-    remote_src: yes
-    src: /usr/local/src/rtl8812au/8812au.ko
-    dest: /lib/modules/{{ ansible_kernel }}/kernel/drivers/net/8812au.ko
-  when: not rtl8812au_exist.stat.exists
-- name: run depmod for rtl8812au
-  command: depmod
-- name: install rtl8812au to kernel
-  modprobe:
-    name: 8812au
-    state: present
 - name: load module on startup
   lineinfile:
     path: /etc/modules
     line: 8812au
-- name: copy rtl8812au interface
-  template:
-    src: interface.ini
-    dest: /etc/network/interfaces.d/enx{{ rtl8812au_mac }}
-- name: copy rtl8812au wpa supplicant template
-  template:
-    src: wpa_supplicant.conf.ini
-    dest: /etc/wpa_supplicant/wpa_supplicant-enx{{ rtl8812au_mac }}.conf
-
+  when: rtl8812au_load_module_on_startup
