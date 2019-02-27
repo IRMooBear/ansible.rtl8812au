@@ -3,9 +3,9 @@
 - name: check rtl8812au module exist
   stat:
     path: /lib/modules/{{ ansible_kernel }}/kernel/drivers/net/8812au.ko
-  register: rtl8812au_exist
+  register: rtl8812au_check
 - include: compile_rtl8812au.yml
-  when: not rtl8812au_exist.stat.exists
+  when: not rtl8812au_check.stat.exists
 - name: load module on startup
   lineinfile:
     path: /etc/modules

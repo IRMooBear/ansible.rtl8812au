@@ -1,4 +1,5 @@
-- name: get rtl8812au dependencies
+---
+- name: install rtl8812au dependencies
   apt:
     state: present
     name: [

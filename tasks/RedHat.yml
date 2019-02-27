@@ -1,0 +1,7 @@
+---
+- name: install rtl8812au dependencies
+  yum:
+    name: [
+      'git',
+      'kernel-devel'
+    ]
