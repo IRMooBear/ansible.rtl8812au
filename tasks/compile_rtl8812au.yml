@@ -1,7 +1,3 @@
-- include: RedHat.yml
-  when: ansible_os_family == 'RedHat'
-- include: Debian.yml
-  when: ansible_os_family == 'Debian'
 - name: git clone gnab/rtl8812au
   git:
     repo: https://github.com/gnab/rtl8812au.git
@@ -19,6 +15,10 @@
     dest: /usr/local/src/rtl8812au
     owner: "{{ ansible_ssh_user }}"
     recurse: yes
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
 - name: make rtl8812au
   become: false
   make:
