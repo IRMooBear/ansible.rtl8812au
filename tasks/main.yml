@@ -6,8 +6,10 @@
   register: rtl8812au_check
 - include: compile_rtl8812au.yml
   when: not rtl8812au_check.stat.exists
+- include: configure_Debian.yml
+  when: ansible_os_family == 'Debian'
 - name: load module on startup
   lineinfile:
     path: /etc/modules
     line: 8812au
-  when: rtl8812au_load_module_on_startup
+    state: "{{ 'present' if rtl8812au_load_module_on_startup else 'absent' }}"

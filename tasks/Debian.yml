@@ -11,21 +11,3 @@
   retries: 3
   delay: 10
   until: not result.failed
-- name: disable compile rtl8812au for i386
-  lineinfile:
-    path: /usr/local/src/rtl8812au/Makefile
-    regexp: '^CONFIG_PLATFORM_I386_PC'
-    line: 'CONFIG_PLATFORM_I386_PC = n'
-- name: enable compile rtl8812au for RPI
-  lineinfile:
-    path: /usr/local/src/rtl8812au/Makefile
-    regexp: '^CONFIG_PLATFORM_ARM_RPI'
-    line: 'CONFIG_PLATFORM_ARM_RPI = y'
-- name: copy rtl8812au interface
-  template:
-    src: interface.ini
-    dest: /etc/network/interfaces.d/enx{{ rtl8812au_mac }}
-- name: copy rtl8812au wpa supplicant template
-  template:
-    src: wpa_supplicant.conf.ini
-    dest: /etc/wpa_supplicant/wpa_supplicant-enx{{ rtl8812au_mac }}.conf
