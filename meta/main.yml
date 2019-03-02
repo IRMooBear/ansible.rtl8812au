@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: rtl8812au
   author: Anh Nguyen
   description: Compile RTL8812AU drivers on RPI, install kernel module and configure network interface.
   company: N/A
