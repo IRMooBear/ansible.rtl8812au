@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - driver_rtl8812au
+    - ansible.rtl8812au
