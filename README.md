@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/IRMooBear/driver_rtl8812au.svg?branch=master)](https://travis-ci.com/IRMooBear/driver_rtl8812au)
+[![Build Status](https://travis-ci.com/IRMooBear/ansible.rtl8812au.svg?branch=master)](https://travis-ci.com/IRMooBear/ansible.rtl8812au)
 
 Pi Driver RTL8812AU
 =========
