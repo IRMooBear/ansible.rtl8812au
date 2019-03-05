@@ -1,9 +1,13 @@
 [![Build Status](https://travis-ci.com/IRMooBear/ansible.rtl8812au.svg?branch=master)](https://travis-ci.com/IRMooBear/ansible.rtl8812au)
 
-Pi Driver RTL8812AU
+Driver RTL8812AU
 =========
 
 This ansible role will go through the complete process of downloading and compiling the RTL8812AU driver, loading it into kernel, ensure that it load on boot and install network interface.
+
+Dependencies
+--------------
+This role build the driver from https://github.com/gnab/rtl8812au.
 
 Role Variables
 --------------

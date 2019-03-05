@@ -31,7 +31,7 @@ galaxy_info:
   #github_branch:
 
   platforms:
-    - name: Debiant
+    - name: Debian
       versions:
         - stretch
 

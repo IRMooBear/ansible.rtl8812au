@@ -36,6 +36,7 @@
   make:
     chdir: /usr/local/src/rtl8812au
     params:
+      MAKEFLAGS: -j{{ compile_threads }}
       NUM_THREADS: "{{ compile_threads }}"
 - name: copy rtl8812au kernel module
   copy:
