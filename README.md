@@ -55,7 +55,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: irmoobear.pi_driver_rtl8812au }
+         - { role: irmoobear.rtl8812au }
 
 License
 -------
