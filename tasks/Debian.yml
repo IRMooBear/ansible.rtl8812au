@@ -1,5 +1,6 @@
 ---
 - name: install rtl8812au dependencies
+  become: yes
   apt:
     state: present
     name: [

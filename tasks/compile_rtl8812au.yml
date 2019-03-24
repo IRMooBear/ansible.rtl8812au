@@ -1,4 +1,5 @@
 - name: git clone gnab/rtl8812au
+  become: yes
   git:
     repo: https://github.com/gnab/rtl8812au.git
     dest: /usr/local/src/rtl8812au
@@ -11,6 +12,7 @@
   delay: 10
   until: not rtl8812au_repo.failed
 - name: set rtl8812au to be owned by local ansible_ssh_user
+  become: yes
   file:
     dest: /usr/local/src/rtl8812au
     owner: "{{ ansible_ssh_user }}"
@@ -32,20 +34,23 @@
     line: 'CONFIG_PLATFORM_ARM_RPI = y'
   when: rtl8812au_config_rpi
 - name: make rtl8812au
-  become: false
+  become: no
   make:
     chdir: /usr/local/src/rtl8812au
     params:
       MAKEFLAGS: -j{{ compile_threads }}
       NUM_THREADS: "{{ compile_threads }}"
 - name: copy rtl8812au kernel module
+  become: yes
   copy:
     remote_src: yes
     src: /usr/local/src/rtl8812au/8812au.ko
     dest: /lib/modules/{{ ansible_kernel }}/kernel/drivers/net/8812au.ko
 - name: run depmod for rtl8812au
+  become: yes
   command: depmod
 - name: install rtl8812au to kernel
+  become: yes
   modprobe:
     name: 8812au
     state: present
